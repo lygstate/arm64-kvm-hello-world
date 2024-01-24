@@ -1,4 +1,4 @@
-TOOL_CHAIN_PREFIX ?= aarch64-none-elf-
+TOOL_CHAIN_PREFIX ?= arm-none-eabi-
 
 CC = $(TOOL_CHAIN_PREFIX)gcc
 CXX = $(TOOL_CHAIN_PREFIX)g++
