@@ -82,6 +82,20 @@ int32_t start_slave_core_hvc(int cpu_pos)
 #endif
   return output[0];
 }
+int start_core(int core_id)
+{
+  int result = -2;
+  int32_t smc_result = start_slave_core_smc(core_id);
+  if (smc_result == -1)
+  {
+    result = start_slave_core_hvc(core_id);
+  }
+  else
+  {
+    result = 0;
+  }
+  return result;
+}
 
 /* https://developer.arm.com/documentation/ddi0500/d/system-control/aarch32-register-descriptions/multiprocessor-affinity-register */
 uint32_t arm_mpidr_get(void) {
@@ -98,6 +112,8 @@ void system_off()
   hvc_call(input, output);
 }
 
+
+
 bool main_done = false;
 
 void main()
@@ -109,12 +125,8 @@ void main()
   }
   printf("Hello World gicd_ctlr_value: 0x%08x process_id: 0x%08x\n", gicd_ctlr_value, process_id);
   if (process_id == 0) {
-    int32_t smc_result = start_slave_core_smc(1);
-    int32_t hvc_result = -2;
-    if (smc_result == -1) {
-      hvc_result = start_slave_core_hvc(1);
-    }
-    printf("smc:0x%08x hvc:0x%08x\n", smc_result, hvc_result);
+
+    printf("start ret:0x%08x\n", start_core(1));
   }
   main_done = true;
   for (;;) {
