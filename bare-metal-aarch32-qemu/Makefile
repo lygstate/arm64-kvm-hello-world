@@ -28,9 +28,9 @@ GCC_ROOT :=/home/xch/work/xpack-arm-none-eabi-gcc-13.2.1-1.1
 LDFLAGS := -nostdlib -T link_script.ld -L$(GCC_ROOT)/arm-none-eabi/lib/thumb/v8-a+simd/hard/ -L$(GCC_ROOT)/lib/gcc/arm-none-eabi/13.2.1/thumb/v8-a+simd/hard/
 all: hello_world.elf
 
-hello_world.elf: link_script.ld startup.o hello_world.o
+hello_world.elf: link_script.ld startup.o hello_world.o nosys_gnu.o
 	# Link the two object files to an elf file
-	$(LD) $(LDFLAGS) startup.o hello_world.o -lnosys -lgcc -lc_nano -lm -o hello_world.elf
+	$(LD) $(LDFLAGS) startup.o hello_world.o nosys_gnu.o -lnosys -lgcc -lc_nano -lm -o hello_world.elf
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -MMD $< -o $@
